@@ -1,11 +1,9 @@
-import { createConnection, ConnectionOptions } from 'mysql2/promise';
+import { createPool } from 'mysql2/promise';
 
-const config = {
+export default createPool({
     host: process.env.db_mysql_host,
     user: process.env.db_mysql_user,
     password: process.env.db_mysql_password,
     database: process.env.db_mysql_database,
     decimalNumbers: true
-} as ConnectionOptions;
-
-export default createConnection(config);
+});

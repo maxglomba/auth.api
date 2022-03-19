@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { route, POST } from 'awilix-express';
+import { route, POST, GET } from 'awilix-express';
 import { IdentityService } from '../services/identity.service';
 import { BaseController } from '../common/controllers/base.controller';
 import { UserCreateDto } from '../dtos/user.dto';
@@ -8,6 +8,13 @@ import { UserCreateDto } from '../dtos/user.dto';
 export default class IdentityController extends BaseController {
     constructor(private identityService: IdentityService) {
         super();
+    }
+
+    @route('/users')
+    @GET()
+    async all(req: Request, res: Response) {
+        const result = await this.identityService.getAll();
+        res.send(result);
     }
 
     @route('/authenticate')

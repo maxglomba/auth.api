@@ -1,12 +1,23 @@
-import connection from '../common/persistence/persistence.mysql';
 import { UserCreateDto } from '../dtos/user.dto';
 import { ApplicationException } from '../common/exceptions/application.exception';
 import SHA from 'sha.js';
 import jwt from 'jsonwebtoken';
 import { Schema } from 'joi';
+import { IdentityRepository } from './repositories/identity.repository';
+import { Identity } from './repositories/domain/identity';
 const JoiValidations = require('./validation/identity.schema');
 
 export class IdentityService {
+    constructor(
+        private readonly identityRepository: IdentityRepository
+    ) { }
+
+    async getAll(): Promise<Identity[]> {
+
+        const users = await this.identityRepository.all();
+        return users;
+    }
+
     async authenticate(email: string, password: string): Promise<string> {
         const validateSchema: Schema = JoiValidations.identityAuthenticateSchema;
         try {
@@ -15,27 +26,22 @@ export class IdentityService {
             throw new ApplicationException(error)
         }
 
-        const con = await connection;
         // Hash passowrd
         password = SHA('sha256').update(password).digest('base64');
-        const [rows]: any[] = await con.execute(
-            'SELECT * FROM auth_user WHERE email = ? AND password = ?',
-            [email, password]
-        );
 
-        if (process.env.jwt_secret_key) {
-            const secretKey: string = process.env.jwt_secret_key;
-
-            if (rows.length) {
-
+        const validUser = await this.identityRepository.find(email, password);
+        if(validUser){
+            if (process.env.jwt_secret_key) {
+                const secretKey: string = process.env.jwt_secret_key;
                 return jwt.sign({
-                    id: rows[0].id,
-                    email: rows[0].email
+                    id: validUser.id,
+                    email: validUser.email
                 }, secretKey, { expiresIn: '7h' });
+            } else {
+                throw new Error('Secret key is not defined.');
             }
-        } else {
-            throw new Error('Secret key is not defined.');
         }
+        
 
         throw new ApplicationException('Invalid user credentials supplied.');
     }
@@ -49,28 +55,14 @@ export class IdentityService {
             throw new ApplicationException(error)
         }
 
-        const con = await connection;
-        const userExists = await this.checkUserExists(user);
-        if (userExists) throw new ApplicationException('Email already exists.')
+        //unique email check
+        const alreadyExistsUser = await this.identityRepository.find(user.email, null);
+        if(alreadyExistsUser) throw new ApplicationException('Email already exists.')
+
         // Hash password
         user.password = SHA('sha256').update(user.password).digest('base64');
 
-        await con.execute(
-            'INSERT INTO auth_user(email, password, created_at) VALUES(?, ?, ?)',
-            [user.email, user.password, new Date()]
-        );
+        await this.identityRepository.create(user);
     }
 
-    private async checkUserExists(user: UserCreateDto): Promise<Boolean> {
-        const con = await connection;
-
-        const result = await con.execute(
-            'SELECT * FROM auth_user WHERE email = ?',
-            [user.email]
-        );
-        if (result) {
-            return true;
-        }
-        return false;
-    }
 }
