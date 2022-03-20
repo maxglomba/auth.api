@@ -1,10 +1,11 @@
 import { UserCreateDto } from '../dtos/user.dto';
-import { ApplicationException } from '../common/exceptions/application.exception';
+import { ApplicationExceptions } from '../common/exceptions/application.exception';
 import SHA from 'sha.js';
 import jwt from 'jsonwebtoken';
 import { Schema } from 'joi';
 import { IdentityRepository } from './repositories/identity.repository';
 import { Identity } from './repositories/domain/identity';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const JoiValidations = require('./validation/identity.schema');
 
 export class IdentityService {
@@ -22,8 +23,8 @@ export class IdentityService {
         const validateSchema: Schema = JoiValidations.identityAuthenticateSchema;
         try {
             await validateSchema.validateAsync({email, password});
-        } catch (error:any) {
-            throw new ApplicationException(error)
+        } catch (error) {
+            throw new ApplicationExceptions(error as string);
         }
 
         // Hash passowrd
@@ -43,7 +44,7 @@ export class IdentityService {
         }
         
 
-        throw new ApplicationException('Invalid user credentials supplied.');
+        throw new ApplicationExceptions('Invalid user credentials supplied.');
     }
 
     async create(user: UserCreateDto): Promise<void> {
@@ -51,13 +52,13 @@ export class IdentityService {
         const validateSchema: Schema = JoiValidations.identityCreateSchema;
         try {
             await validateSchema.validateAsync(user);
-        } catch (error:any) {
-            throw new ApplicationException(error)
+        } catch (error) {
+            throw new ApplicationExceptions(error as string);
         }
 
         //unique email check
         const alreadyExistsUser = await this.identityRepository.find(user.email, null);
-        if(alreadyExistsUser) throw new ApplicationException('Email already exists.')
+        if(alreadyExistsUser) throw new ApplicationExceptions('Email already exists.');
 
         // Hash password
         user.password = SHA('sha256').update(user.password).digest('base64');
