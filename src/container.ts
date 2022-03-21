@@ -11,7 +11,7 @@ import { IdentityMOCKRepository } from './services/repositories/impl/mock/identi
 
 export default (app: Application) => {
     const container = createContainer({
-        injectionMode: "CLASSIC"
+        injectionMode: 'CLASSIC'
     });
 
     container.register({
@@ -28,4 +28,4 @@ export default (app: Application) => {
     });
 
     app.use(scopePerRequest(container));
-}
+};
