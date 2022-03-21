@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { route, POST, GET } from 'awilix-express';
 import { IdentityService } from '../services/identity.service';
 import { BaseController } from '../common/controllers/base.controller';
-import { UserPayloadDto } from '../dtos/user.dto';
+import { UserCreateDto } from '../dtos/user.dto';
 
 @route('/identity')
 export default class IdentityController extends BaseController {
@@ -144,7 +144,7 @@ export default class IdentityController extends BaseController {
             await this.identityService.create({
                 email: req.body.email,
                 password: req.body.password
-            } as UserPayloadDto);
+            } as UserCreateDto);
 
             res.status(204);
             res.send();
