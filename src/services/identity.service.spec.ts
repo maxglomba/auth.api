@@ -2,7 +2,7 @@ import assert = require('assert');
 import { IdentityService } from './identity.service';
 
 import { IdentityMOCKRepository } from './repositories/impl/mock/identity.repository';
-import { UserCreateDto } from '../dtos/user.dto'
+import { UserCreateDto } from '../dtos/user.dto';
 
 const identityService = new IdentityService(
     new IdentityMOCKRepository()
@@ -25,7 +25,11 @@ describe('Identity.Service', () => {
                 } as UserCreateDto);
 
             } catch (error) {
-                assert.match(error.message, new RegExp('ValidationError: "email" length must be at least'));
+                let errorMessage = 'Failed to do something exceptional';
+                if (error instanceof Error) {
+                    errorMessage = error.message;
+                }
+                assert.match(errorMessage, new RegExp('ValidationError: "email" length must be at least'));
             }
         });
 
@@ -36,7 +40,11 @@ describe('Identity.Service', () => {
                     password: '1'
                 } as UserCreateDto);
             } catch (error) {
-                assert.match(error.message , new RegExp('ValidationError: "password" length must be at least'));
+                let errorMessage = 'Failed to do something exceptional';
+                if (error instanceof Error) {
+                    errorMessage = error.message;
+                }
+                assert.match(errorMessage , new RegExp('ValidationError: "password" length must be at least'));
             }
 
         });
@@ -49,7 +57,11 @@ describe('Identity.Service', () => {
                     password: 'test1234'
                 } as UserCreateDto);
             } catch (error) {
-                assert.equal(error.message, 'Email already exists.');
+                let errorMessage = 'Failed to do something exceptional';
+                if (error instanceof Error) {
+                    errorMessage = error.message;
+                }
+                assert.equal(errorMessage, 'Email already exists.');
             }
         });
     });

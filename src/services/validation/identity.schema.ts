@@ -25,4 +25,4 @@ const identityAuthenticateSchema = Joi.object({
 module.exports = {
     identityCreateSchema,
     identityAuthenticateSchema
-}
+};
