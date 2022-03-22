@@ -3,6 +3,6 @@ import { Identity } from './domain/identity';
 
 export interface IdentityRepository {
     all(): Promise<Identity[]>;
-    find(email: string, passowrd: string | null): Promise<Identity | null>;
+    find(email: string, password: string | null): Promise<Identity | null>;
     create(entry: UserCreateDto): Promise<void>;
 }

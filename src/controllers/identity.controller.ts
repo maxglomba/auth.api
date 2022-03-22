@@ -89,10 +89,11 @@ export default class IdentityController extends BaseController {
  *  post:
  *   description: Authenticate user in platform
  *   requestBody:
- *     content:
- *      application/json:
- *       schema:
- *        $ref: '#/components/schemas/UserPayload'
+ *    required: true
+ *    content:
+ *     application/json:
+ *      schema:
+ *       $ref: '#/components/schemas/UserPayload'
  *   responses:
  *    200:
  *     description: Success
@@ -122,6 +123,7 @@ export default class IdentityController extends BaseController {
  *  post:
  *   description: Create user in platform
  *   requestBody:
+ *     required: true
  *     content:
  *      application/json:
  *       schema:

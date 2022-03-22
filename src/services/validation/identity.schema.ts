@@ -1,4 +1,4 @@
-import Joi, { Schema } from 'joi';
+import Joi from 'joi';
 
 const identityCreateSchema = Joi.object({
     email: Joi.string()
