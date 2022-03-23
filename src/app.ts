@@ -3,6 +3,7 @@ process.env.APP_ENV = process.env.APP_ENV || 'development';
 
 // Env files
 import dotenv from 'dotenv';
+import morgan from 'morgan';
 
 dotenv.config({
     path: `${__dirname}/../config/${process.env.APP_ENV}.env`
@@ -36,6 +37,9 @@ const swaggerOptions = {
 // Create a new express app instance
 const app: express.Application = express();
 
+if(process.env.APP_ENV === 'development'){
+    app.use(morgan('dev'));
+}
 app.use(json());
 
 // Load dependencies
