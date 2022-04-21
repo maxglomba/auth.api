@@ -9,7 +9,8 @@ dotenv.config({
     path: `${__dirname}/../config/${process.env.APP_ENV}.env`
 });
 
-import express, { json } from 'express';
+import express from 'express';
+import { json } from 'express';
 import { loadControllers } from 'awilix-express';
 import container from './container';
 
@@ -48,9 +49,10 @@ container(app);
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 
+console.log(__dirname);
 // Load controllers
 app.use(loadControllers(
-    'controllers/*.ts',
+    'controllers/*.js',
     { cwd: __dirname })
 );
 

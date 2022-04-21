@@ -37,7 +37,7 @@ export class IdentityService {
                 return jwt.sign({
                     id: validUser.id,
                     email: validUser.email
-                }, secretKey, { expiresIn: '7h' });
+                }, secretKey, { expiresIn: '7h',algorithm : 'HS256' });
             } else {
                 throw new Error('Secret key is not defined.');
             }
