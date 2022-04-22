@@ -11,5 +11,4 @@ const config = {
     }
 };
 
-
 export default new ConnectionPool(config).connect();
