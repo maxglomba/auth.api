@@ -1,5 +1,5 @@
 import { app } from './app';
 
-app.listen(5000, function () {
-    console.log('App is running on port 5000!');
+app.listen(process.env.PORT || 5000, function () {
+    console.log('App is running on port' + process.env.PORT + '!');
 });
