@@ -10,6 +10,7 @@ dotenv.config({
 });
 
 import express from 'express';
+import cors from 'cors';
 import { json } from 'express';
 import { loadControllers } from 'awilix-express';
 import container from './container';
@@ -37,6 +38,9 @@ const swaggerOptions = {
 
 // Create a new express app instance
 const app: express.Application = express();
+
+//CORS
+app.use(cors());
 
 if(process.env.APP_ENV === 'development'){
     app.use(morgan('dev'));
