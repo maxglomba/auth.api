@@ -2,12 +2,15 @@
   "name": "api.auth",
   "version": "1.0.0",
   "description": "Security API managment.",
-  "main": "index.js",
+  "main": "build/server.js",
   "scripts": {
     "test": "mocha -r ts-node/register src/**/**.spec.ts",
     "start": "node build/server.js",
     "build": "tsc -p tsconfig.json",
     "start:dev": "ts-node-dev --respawn --transpile-only src/server.ts"
+  },
+  "engines": {
+    "node": "14.x"
   },
   "author": "",
   "license": "ISC",
