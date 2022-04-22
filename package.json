@@ -22,6 +22,7 @@
     "express": "^4.17.1",
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.10.0",
     "mssql": "^8.0.2",
     "mysql2": "^2.1.0",
     "sha.js": "^2.4.11",
@@ -46,7 +47,6 @@
     "@typescript-eslint/parser": "^5.15.0",
     "eslint": "^8.11.0",
     "mocha": "^9.2.2",
-    "morgan": "^1.10.0",
     "ts-node-dev": "^1.0.0-pre.49"
   }
 }
